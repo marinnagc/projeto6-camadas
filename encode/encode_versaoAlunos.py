@@ -4,6 +4,9 @@ from suaBibSignal import *
 import numpy as np
 import sounddevice as sd
 import matplotlib.pyplot as plt
+import peakutils
+import time
+
 
 #funções caso queriram usar para sair...
 def signal_handler(signal, frame):
@@ -24,7 +27,9 @@ def main():
     NUM = int(input("Digite um número: "))
     freq = getFreq(NUM)
     tone = []
-    tempo = np.linspace(0, 2, 2*44100,endpoint=False)
+    duration = 5
+    time.sleep(5)
+    tempo = np.linspace(0, duration, duration*44100,endpoint=False)
     tone1 = np.sin(2*np.pi*freq[0]*tempo)
     tone2 = np.sin(2*np.pi*freq[1]*tempo)
     tone = tone1 + tone2
@@ -39,7 +44,6 @@ def main():
     # Some as duas senoides. A soma será o sinal a ser emitido.
     # Utilize a funcao da biblioteca sounddevice para reproduzir o som. Entenda seus argumento.
     # Você pode gravar o som com seu celular ou qualquer outro microfone para o lado receptor decodificar depois. Ou reproduzir enquanto o receptor já capta e decodifica.
-    
     # construa o gráfico do sinal emitido e o gráfico da transformada de Fourier. Cuidado, como as frequencias sao relativamente altas, voce deve plotar apenas alguns pontos (alguns periodos) para conseguirmos ver o sinal
     fs = 44100
     print("Inicializando encoder")
@@ -53,6 +57,13 @@ def main():
     sinal = signalMeu()
     sinal.plotFFT(tone, fs)
     # Exibe gráficos
+    plt.show()
+
+    plt.plot(tempo, tone)
+    plt.title("Sinal emitido")
+    plt.xlabel("Tempo [s]")
+    plt.ylabel("Amplitude")
+    plt.grid(True)
     plt.show()
     
 
