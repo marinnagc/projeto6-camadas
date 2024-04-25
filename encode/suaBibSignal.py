@@ -1,10 +1,9 @@
-
 import numpy as np
 import sounddevice as sd
 import matplotlib.pyplot as plt
 from scipy.fftpack import fft
 from scipy import signal as window
-
+from scipy.signal.windows import hamming
 
 
 class signalMeu:
@@ -18,7 +17,7 @@ class signalMeu:
     def calcFFT(self, signal, fs):
         # https://docs.scipy.org/doc/scipy/reference/tutorial/fftpack.html
         N  = len(signal)
-        W = window.hamming(N)
+        W = hamming(N)
         T  = 1/fs
         xf = np.linspace(0.0, 1.0/(2.0*T), N//2)
         yf = fft(signal*W)
