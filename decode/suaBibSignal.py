@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> ff4b584ba9c3b1552b3123213380d4cd919eba8b
 import numpy as np
 import sounddevice as sd
 import matplotlib.pyplot as plt
