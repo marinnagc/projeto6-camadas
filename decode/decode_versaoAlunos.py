@@ -34,8 +34,9 @@ def main():
     #use um time.sleep para a espera.
    
     #A seguir, faca um print informando que a gravacao foi inicializada
-    print(f'A gravação vai comecçar em 3 segundos')
-    time.sleep(3)
+    print(f'A gravação vai começar em 3 segundos')
+    time.sleep(2)
+    print("Gravação iniciada")
     #para gravar, utilize
     audio = sd.rec(int(numAmostras), samplerate=fs, channels=1)
     sd.wait()
@@ -71,10 +72,37 @@ def main():
     #Provavelmente, se tudo deu certo, 2 picos serao PRÓXIMOS aos valores da tabela. Os demais serão picos de ruídos.
 
     
+    
+
+
+    
     #printe os picos encontrados! 
-    index_peaks = peakutils.indexes(np.abs(yf), thres=0.5, min_dist=30)
-    peak_freqs = xf[index_peaks]
-    print("Picos detectados:", peak_freqs)
+    index_peaks = peakutils.indexes(np.abs(yf), thres=0.2, min_dist=15)
+    # Ordenar os picos pela magnitude e pegar os 5 maiores
+    print(f'INDEX_PEAKS = {index_peaks}')
+    peak_freqs = [(xf[i], np.abs(yf[i])) for i in index_peaks]
+    peak_freqs.sort(key=lambda x: x[1], reverse=True)
+    top_five_peaks = peak_freqs[:5]
+    print("Picos detectados:", top_five_peaks)
+
+    dtmf_keys = {
+            (679, 1209): '1', (679, 1336): '2', (679, 1477): '3', (679, 1633): 'A',
+            (770, 1209): '4', (770, 1336): '5', (770, 1477): '6', (770, 1633): 'B',
+            (852, 1209): '7', (852, 1336): '8', (852, 1477): '9', (852, 1633): 'C',
+            (941, 1209): '*', (941, 1336): '0', (941, 1477): '#', (941, 1633): 'D'
+        }
+    
+    pico_1 = top_five_peaks[0][0].round(0)
+    pico_2 = top_five_peaks[1][0].round(0)
+    if pico_1>pico_2:
+        tupla = (pico_2,pico_1)
+    else:
+        tupla=(pico_1,pico_2)
+
+    if tupla in dtmf_keys.keys():
+        print(f'A tecla foi >{int(dtmf_keys[tupla])}<')
+
+    
     #encontre na tabela duas frequencias proximas às frequencias de pico encontradas e descubra qual foi a tecla
     #print o valor tecla!!!
     #Se acertou, parabens! Voce construiu um sistema DTMF
@@ -83,7 +111,16 @@ def main():
 
       
     ## Exiba gráficos do fourier do som gravados 
-
+    plt.figure(figsize=(10, 4))
+    plt.plot(xf, np.abs(yf), label='FFT Magnitude')
+    for freq, mag in top_five_peaks:
+        plt.plot(freq, mag, 'ro')  # marca os picos com um ponto vermelho
+    plt.title("FFT of Recorded Audio with Peaks")
+    plt.xlabel("Frequency [Hz]")
+    plt.ylabel("Magnitude")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 
 if __name__ == "__main__":
     main()
