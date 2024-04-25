@@ -34,8 +34,9 @@ def main():
     #use um time.sleep para a espera.
    
     #A seguir, faca um print informando que a gravacao foi inicializada
-    print(f'A gravação vai comecçar em 3 segundos')
-    time.sleep(3)
+    print(f'A gravação vai começar em 3 segundos')
+    time.sleep(2)
+    print("Gravação iniciada")
     #para gravar, utilize
     audio = sd.rec(int(numAmostras), samplerate=fs, channels=1)
     sd.wait()
@@ -72,9 +73,12 @@ def main():
 
     
     #printe os picos encontrados! 
-    index_peaks = peakutils.indexes(np.abs(yf), thres=0.5, min_dist=30)
-    peak_freqs = xf[index_peaks]
-    print("Picos detectados:", peak_freqs)
+    index_peaks = peakutils.indexes(np.abs(yf), thres=0.5, min_dist=20)
+    # Ordenar os picos pela magnitude e pegar os 5 maiores
+    peak_freqs = [(xf[i], np.abs(yf[i])) for i in index_peaks]
+    peak_freqs.sort(key=lambda x: x[1], reverse=True)
+    top_five_peaks = peak_freqs[:5]
+    print("Picos detectados:", top_five_peaks)
     #encontre na tabela duas frequencias proximas às frequencias de pico encontradas e descubra qual foi a tecla
     #print o valor tecla!!!
     #Se acertou, parabens! Voce construiu um sistema DTMF
