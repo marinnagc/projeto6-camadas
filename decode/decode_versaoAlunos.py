@@ -116,7 +116,7 @@ def main():
     ## Exiba gráficos do fourier do som gravados 
     plt.figure(figsize=(10, 4))
     plt.plot(xf, np.abs(yf), label='FFT Magnitude')
-    for freq, mag in top_five_peaks:
+    for freq, mag in peak_freqs:
         plt.plot(freq, mag, 'ro')  # marca os picos com um ponto vermelho
     plt.title("FFT of Recorded Audio with Peaks")
     plt.xlabel("Frequency [Hz]")
