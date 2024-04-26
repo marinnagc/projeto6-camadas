@@ -27,7 +27,7 @@ def main():
     NUM = int(input("Digite um número: "))
     freq = getFreq(NUM)
     tone = []
-    duration = 5
+    duration = 3
     time.sleep(5)
     tempo = np.linspace(0, duration, duration*44100,endpoint=False)
     tone1 = np.sin(2*np.pi*freq[0]*tempo)
@@ -59,8 +59,10 @@ def main():
     # Exibe gráficos
     plt.show()
 
+
     plt.plot(tempo, tone)
-    plt.title("Sinal emitido")
+    plt.xlim([0, 0.02])
+    plt.title("Sinal total emitido")
     plt.xlabel("Tempo [s]")
     plt.ylabel("Amplitude")
     plt.grid(True)
