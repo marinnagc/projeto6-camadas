@@ -81,26 +81,29 @@ def main():
     # Ordenar os picos pela magnitude e pegar os 5 maiores
     print(f'INDEX_PEAKS = {index_peaks}')
     peak_freqs = [(xf[i], np.abs(yf[i])) for i in index_peaks]
-    peak_freqs.sort(key=lambda x: x[1], reverse=True)
-    top_five_peaks = peak_freqs[:5]
-    print("Picos detectados:", top_five_peaks)
+    print("Picos detectados:", peak_freqs)
 
     dtmf_keys = {
-            (679, 1209): '1', (679, 1336): '2', (679, 1477): '3', (679, 1633): 'A',
-            (770, 1209): '4', (770, 1336): '5', (770, 1477): '6', (770, 1633): 'B',
-            (852, 1209): '7', (852, 1336): '8', (852, 1477): '9', (852, 1633): 'C',
-            (941, 1209): '*', (941, 1336): '0', (941, 1477): '#', (941, 1633): 'D'
+            '1':(679, 1209), '2':(679, 1336), '3':(679, 1477), 'A':(679, 1633),
+           '4': (770, 1209),'5': (770, 1336),'6': (770, 1477),'B': (770, 1633),
+            '7':(852, 1209),'8': (852, 1336),'9': (852, 1477),'C': (852, 1633),
+            '*':(941, 1209), '0':(941, 1336), '#':(941, 1477),'D': (941, 1633)
         }
+    possiveis_picos = [679,770,852,941, 1209, 1336, 1477, 1633]
+    lista_freq=[]
+    for tupla in peak_freqs:
+        pico = tupla[0]
+        for possivel in possiveis_picos:
+            if np.abs(pico - possivel) < 5:
+                print(f'Frequência encontrada: {pico} bateu com {possivel}')
+                lista_freq.append(possivel)
+    valores = (lista_freq[0],lista_freq[1])
+    for key, value in dtmf_keys.items():
+        if valores == value:
+            print(f'A tecla foi {key}')
     
-    pico_1 = top_five_peaks[0][0].round(0)
-    pico_2 = top_five_peaks[1][0].round(0)
-    if pico_1>pico_2:
-        tupla = (pico_2,pico_1)
-    else:
-        tupla=(pico_1,pico_2)
 
-    if tupla in dtmf_keys.keys():
-        print(f'A tecla foi >{int(dtmf_keys[tupla])}<')
+    
 
     
     #encontre na tabela duas frequencias proximas às frequencias de pico encontradas e descubra qual foi a tecla
